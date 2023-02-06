@@ -74,7 +74,11 @@ class Game extends React.Component {
         }
       ]),
       stepNumber: history.length
-    });    
+    });
+
+    if (calculateWinner(squares)) {
+      return;
+    }  
 
     squares[computerTurn(squares)] = 'o';
 
