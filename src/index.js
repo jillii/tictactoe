@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
@@ -142,7 +142,7 @@ function computerTurn(squares) {
   do {
     random = Math.floor(Math.random() * 9);
     count++;
-  } while (squares[random] != undefined && count < 9);
+  } while (squares[random] !== undefined && count < 9);
 
   return random;
 }
