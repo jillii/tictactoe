@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
@@ -53,7 +53,6 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null)
       }],
-      xIsNext: true,
       stepNumber: 0
     };
   }
@@ -66,7 +65,7 @@ class Game extends React.Component {
       return;
     }
 
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = 'x';
     
     this.setState({
       history: history.concat([
@@ -74,16 +73,24 @@ class Game extends React.Component {
           squares: squares,
         }
       ]),
-      xIsNext: !this.state.xIsNext,
+      stepNumber: history.length
+    });    
+
+    squares[computerTurn(squares)] = 'o';
+
+    this.setState({
+      history: history.concat([
+        {
+          squares: squares,
+        }
+      ]),
       stepNumber: history.length
     });
   }
 
   jumpTo(step) {
     this.setState({
-      stepNumber: step,
-      xIsNext: (step % 2) === 0
-
+      stepNumber: step
     });
   }
 
@@ -106,8 +113,6 @@ class Game extends React.Component {
     let status;
     if (winner) {
       status = "Winner is " + winner;
-    } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
     return (
@@ -125,6 +130,17 @@ class Game extends React.Component {
       </div>
     );
   }
+}
+
+function computerTurn(squares) {
+  let random = null,
+      count = 0;
+  do {
+    random = Math.floor(Math.random() * 9);
+    count++;
+  } while (squares[random] != undefined && count < 9);
+
+  return random;
 }
 
 function calculateWinner(squares) {
